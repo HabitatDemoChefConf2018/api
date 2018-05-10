@@ -1,0 +1,8 @@
+#!/bin/sh
+ 
+# redirect stderr
+exec 2>&1
+
+export PORT={{cfg.port}}
+cd {{pkg.path}}
+exec node dist
