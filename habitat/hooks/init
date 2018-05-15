@@ -1,0 +1,5 @@
+#!/bin/bash
+exec 2>&1
+
+ln -sf {{pkg.path}}/dist {{pkg.svc_var_path}}
+ln -sf {{pkg.path}}/node_modules {{pkg.svc_var_path}}
