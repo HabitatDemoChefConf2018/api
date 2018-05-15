@@ -1,6 +1,5 @@
 pkg_name=api
 pkg_origin=chefconf
-pkg_version="0.1.0"
 pkg_scaffolding="core/scaffolding-node"
 
 pkg_binds=(
@@ -10,6 +9,15 @@ pkg_exports=(
   [port]=port
 )
 pkg_exposes=(port)
+
+pkg_version() {
+  node -p "require('$SRC_PATH/package.json').version"
+}
+
+do_before() {
+  do_default_before
+  update_pkg_version
+}
 
 do_build() {
   npm install
