@@ -1,15 +1,20 @@
-export default {
-	port: {{cfg.port}},
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+exports.default = {
+	port: 8080,
 	bodyLimit: '100kb',
 	corsHeaders: ['Link'],
 	sites: [
-  {{~#eachAlive bind.site.members as |member|}}
-    { id: '{{member.sys.member_id}}', name: '{{member.sys.hostname}}', uri: 'http://{{member.sys.ip}}:{{member.cfg.port}}' },
-  {{~/eachAlive}}
+		{{~#eachAlive bind.site.members as |member|}}
+			{ id: '{{member.sys.hostname}}', name: '{{member.sys.hostname}}', uri: 'http://{{member.sys.ip}}:{{member.cfg.port}}' },
+		{{~/eachAlive}}
 	],
 	apis: [
-  {{~#eachAlive bind.api.members as |member|}}
-    { id: '{{member.sys.member_id}}', name: '{{member.sys.hostname}}', uri: 'http://{{member.sys.hostname}}:{{member.cfg.port}}' },
-  {{~/eachAlive}}
+		{{~#eachAlive svc.members as |member|}}
+			{ id: '{{member.sys.hostname}}', name: '{{member.sys.hostname}}', uri: 'http://{{member.sys.ip}}:{{member.cfg.port}}' },
+		{{~/eachAlive}}
 	]
-}
+};

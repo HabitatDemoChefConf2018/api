@@ -1,6 +1,8 @@
 pkg_name=api
 pkg_origin=chefconf
 pkg_scaffolding="core/scaffolding-node"
+pkg_svc_user="root"
+pkg_svc_group="$pkg_svc_user"
 
 pkg_binds=(
   [site]="port"
