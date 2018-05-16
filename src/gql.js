@@ -72,7 +72,6 @@ const typeDefs = `
 export const createGraphQLRouter = ({ config }) => {
   const router = express.Router();
 
-  // The resolvers
   const resolvers = {
     Query: {
       info: () => ({
@@ -84,12 +83,21 @@ export const createGraphQLRouter = ({ config }) => {
       site: (root, { id }) => config.sites.find(s => s.id === id),
     },
     Mutation: {
-      createOrder: (root, { createOrderInput }, context) => {
-        const site = config.sites.find(s => s.id === createOrderInput.siteId);
+      createOrder: async (root, { createOrderInput: { siteId, order } }, context) => {
+        const site = config.sites.find(s => s.id === siteId);
         if (site) {
-          return context.site.post(`${site.uri}/api/orders`, createOrderInput.order)
+          return context.site.post(`${site.uri}/api/orders`, order)
+        } else {
+          const knownAPIs = config.apis.map(a => context.site.get(`${a.uri}/api/sites`));
+          const knownSites = await Promise.all(knownAPIs).then((allRes) => {
+            return allRes.reduce((sites, res) => sites.concat(res), []);
+          });
+          const foundSite = knownSites.find(s => s.id === siteId);
+          if (foundSite) {
+            return context.site.post(`${foundSite.uri}/api/orders`, order)
+          }
         }
-        return null;
+        throw new Error(`No site with id "${siteId}" found.`);
       },
     },
     Site: {
@@ -99,13 +107,11 @@ export const createGraphQLRouter = ({ config }) => {
     }
   };
 
-  // Put together a schema
   const schema = makeExecutableSchema({
     typeDefs,
     resolvers,
   });
 
-  // bodyParser is needed just for POST.
   router.use('/graphql', bodyParser.json(), graphqlExpress(() => ({
     schema,
     context: {

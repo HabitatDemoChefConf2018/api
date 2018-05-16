@@ -6,5 +6,10 @@ export default {
   {{~#eachAlive bind.site.members as |member|}}
     { id: '{{member.sys.member_id}}', name: '{{member.sys.hostname}}', uri: 'http://{{member.sys.hostname}}:{{member.cfg.port}}' },
   {{~/eachAlive}}
+	],
+	apis: [
+  {{~#eachAlive bind.api.members as |member|}}
+    { id: '{{member.sys.member_id}}', name: '{{member.sys.hostname}}', uri: 'http://{{member.sys.hostname}}:{{member.cfg.port}}' },
+  {{~/eachAlive}}
 	]
 }
