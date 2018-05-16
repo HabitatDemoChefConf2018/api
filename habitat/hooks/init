@@ -1,6 +1,6 @@
 #!/bin/bash
 exec 2>&1
 
-cp -f {{pkg.svc_var_path}}/config/config.js {{pkg.path}}/dist/
+cp -f {{pkg.svc_var_path}}/config/config.js {{pkg.svc_var_path}}/dist/
 ln -sf {{pkg.path}}/dist {{pkg.svc_var_path}}
 ln -sf {{pkg.path}}/node_modules {{pkg.svc_var_path}}
